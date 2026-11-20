@@ -33,7 +33,7 @@ Lệnh của plugin có tên đầy đủ dạng `/sdd-lite:<lệnh>`. Tên ng�
 | `/task <ID>` | Chia công việc | `tasks.md` |
 | `/implement <ID> [T003 \| T003-T006 \| phase N]` | Viết code theo công việc, test trước | code, tick `tasks.md` |
 | `/sync-domain <ID>` | Đối chiếu code với spec, gộp vào `docs/`, đóng feature | cập nhật `docs/`, `status: done` |
-| `/push <ID> [no-pr]` | Đẩy feature `done` lên GitHub bằng MCP github, mở pull request (không tự merge) | nhánh `feature/<ID>`, commit, PR |
+| `/push <ID> [no-pr]` | Đẩy feature `done` lên GitHub: commit và push bằng `git`, mở pull request bằng MCP github (không tự merge) | nhánh `feature/<ID>`, commit, PR |
 
 ## Quy trình
 
@@ -46,7 +46,7 @@ Lệnh của plugin có tên đầy đủ dạng `/sdd-lite:<lệnh>`. Tên ng�
 /sdd-lite:plan 0001  →  /task 0001  →  /implement 0001  →  /sync-domain 0001  →  /push 0001
 ```
 
-`/push` cần MCP github đã cấu hình (có quyền ghi repo). Lệnh hỏi xác nhận trước khi ghi, đẩy một commit lên nhánh `feature/<ID>` rồi mở pull request; không dùng `git push` và không tự merge.
+`/push` hỏi xác nhận trước khi ghi, rồi commit và `git push` lên nhánh `feature/<ID>` (máy cần đăng nhập GitHub sẵn cho git) và mở pull request bằng MCP github (cần MCP github đã cấu hình; thiếu thì lệnh vẫn push và nhắc bạn tự mở PR). Không `--force`, không tự merge.
 
 ## ID feature
 

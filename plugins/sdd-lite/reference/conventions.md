@@ -106,7 +106,7 @@ Khi trích dẫn từ ngoài feature, ghi kèm ID feature: `0003/FR-001`.
 5. Mỗi yêu cầu phải **kiểm chứng được** (có thể viết thành test hoặc kiểm tra bằng mắt theo tiêu chí rõ ràng). Tránh từ mơ hồ: "nhanh", "thân thiện", "phù hợp".
 6. Điều chưa biết: ghi `[CẦN LÀM RÕ: <câu hỏi>]` thay vì đoán. Tối đa 5 mục như vậy trong một spec; điều nhỏ hơn thì chọn mặc định hợp lý và ghi vào mục Giả định.
 7. Ngày dùng định dạng `YYYY-MM-DD`.
-8. Không tự ý commit hoặc đẩy lên git. Chỉ làm khi người dùng yêu cầu; ngoại lệ duy nhất là `/push`, và `/push` vẫn phải được người dùng xác nhận trước khi ghi lên GitHub. Mọi thao tác ghi lên GitHub dùng MCP github, không dùng `git push`.
+8. Không tự ý commit hoặc đẩy lên git. Chỉ làm khi người dùng yêu cầu; ngoại lệ duy nhất là `/push`, và `/push` vẫn phải được người dùng xác nhận trước khi commit và push. `/push` dùng `git` cục bộ để commit và push (không `--force`, không `--no-verify`), dùng MCP github để mở pull request; không đẩy nội dung file bằng MCP vì buộc phải gõ lại toàn bộ file.
 
 ## 7. Đồng bộ trạng thái và bảng ánh xạ
 

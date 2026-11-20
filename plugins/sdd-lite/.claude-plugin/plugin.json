@@ -1,6 +1,6 @@
 {
   "name": "sdd-lite",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "SDD gọn nhẹ cho cá nhân, bằng tiếng Việt: /init, /spec, /plan, /task, /implement, /sync-domain, /push. Mỗi feature có ID cố định (0001, 0002, ...), nghiệp vụ được lưu bền vững trong docs/domain.",
   "author": {
     "name": "nvlinh"

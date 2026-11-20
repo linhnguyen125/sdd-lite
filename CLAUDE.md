@@ -25,7 +25,7 @@ plugins/sdd-lite/
 - Mỗi lệnh có một đoạn **Vai trò** ngay trước "Nhiệm vụ" (init: PO/SA, spec: BA/PM, plan: SA, task: Tech Lead, implement: Senior Dev, sync-domain: QA + Tech Writer, push: Release Engineer). Persona nằm trong prompt, không tách agent, vì các bước này cần hỏi lại người dùng. Chỉ review độc lập mới dùng agent. Agent không đọc được `${CLAUDE_PLUGIN_ROOT}`, nên đường dẫn file do lệnh truyền vào prompt.
 - Plugin Claude Code **không có thành phần "rules"**, nên rules của stack được `/init` chép từ `templates/stack-rules/<stack>/` vào `.claude/rules/` (có frontmatter `paths:`). Thêm stack mới: tạo thư mục mới cùng tên và thêm điều kiện ở mục "Quy tắc kỹ thuật theo stack" của `init.md`. Không nhầm với `docs/domain/rules.md` (quy tắc nghiệp vụ BR).
 - ID do `scripts/features.js` cấp (`register`), trạng thái đổi bằng `set`. AI không tự tính ID. Không có Node thì dùng phương án thủ công (mục 3.3 của `conventions.md`).
-- `/push` là lệnh duy nhất ghi lên GitHub, và chỉ qua MCP github (`mcp__github__*`, không `git push`); MCP tạo commit phía GitHub nên lệnh phải đồng bộ lại kho cục bộ (`fetch` + `reset --mixed`). Không thêm bước ghi lên GitHub vào lệnh khác.
+- `/push` là lệnh duy nhất ghi lên GitHub: `git` cục bộ để commit và push, MCP github (`mcp__github__*`) chỉ để kiểm tra tài khoản và mở pull request. Không đẩy nội dung file bằng MCP (`push_files` bắt gõ lại toàn bộ file, chậm và tốn token; MCP còn tạo commit phía GitHub làm kho cục bộ lệch). Không thêm bước ghi lên GitHub vào lệnh khác.
 - Mỗi lệnh đọc `${CLAUDE_PLUGIN_ROOT}/reference/conventions.md` trước khi làm việc, và đọc template qua `${CLAUDE_PLUGIN_ROOT}/templates/`.
 
 ## Quy tắc khi sửa plugin
