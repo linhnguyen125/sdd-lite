@@ -48,6 +48,6 @@ Mỗi feature có một ID cố định (`0001`, `0002`, ...), thư mục `specs
 - **Đọc `docs/INDEX.md` trước** để biết file nào chứa gì và khi nào cần đọc. Không đọc cả `docs/`; dùng Grep theo mã (`BR-012`, `ADR-0003`) hoặc tên thực thể rồi đọc đoạn liên quan.
 - Nghiệp vụ hiện tại: `docs/domain/` (`overview.md`, `rules.md`, `entities.md`, `glossary.md`, `flows/`).
 - Kỹ thuật hiện tại: `docs/tech/` (`architecture.md`, `decisions.md`, `data-schema.md`, `api.md`).
-- Danh mục feature (ID ↔ tên): file `specs/features.json`, hoặc nhờ lệnh SDD Lite liệt kê (`features.js list --table` của plugin).
+- Danh mục feature (ID ↔ tên): file `specs/features.json`.
 - Sửa `docs/` thì cập nhật `docs/INDEX.md` trong cùng lượt.
 - Quy tắc: `docs/domain/` và `docs/tech/` mô tả hệ thống **như đang chạy**; `specs/` mô tả **thay đổi** từng feature. Feature `done` không sửa trực tiếp, thay đổi sau đó là feature mới.
