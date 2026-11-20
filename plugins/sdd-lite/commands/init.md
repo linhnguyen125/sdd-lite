@@ -1,5 +1,5 @@
 ---
-description: Khởi tạo dự án SDD Lite từ một ý tưởng - tạo CLAUDE.md, docs/domain, docs/tech và specs/features.js (bản mỏng)
+description: Khởi tạo dự án SDD Lite từ một ý tưởng - tạo CLAUDE.md, docs/domain, docs/tech và specs/features.json (bản mỏng)
 argument-hint: <ý tưởng dự án>
 disable-model-invocation: true
 ---
@@ -15,10 +15,10 @@ Nhiệm vụ: từ ý tưởng, tạo bộ tài liệu nền **mỏng** cho dự
 ## Bước 1. Chuẩn bị
 
 1. Đọc `${CLAUDE_PLUGIN_ROOT}/reference/conventions.md` và tuân theo toàn bộ.
-2. Kiểm tra trạng thái dự án hiện tại bằng Glob: `CLAUDE.md`, `docs/domain/overview.md`, `docs/tech/architecture.md`, `specs/features.js`.
+2. Kiểm tra trạng thái dự án hiện tại bằng Glob: `CLAUDE.md`, `docs/domain/overview.md`, `docs/tech/architecture.md`, `specs/features.json`.
    - **Không ghi đè** bất kỳ file nào đã tồn tại. File nào đã có thì giữ nguyên và báo cuối lệnh.
    - Nếu `docs/domain/overview.md` đã tồn tại: dừng, báo dự án đã khởi tạo, gợi ý dùng `/spec <ý tưởng feature>`. Chỉ tiếp tục nếu người dùng nói rõ muốn bổ sung các file còn thiếu.
-3. Chạy `node --version`. Lỗi: vẫn tiếp tục, nhưng báo người dùng cần cài Node.js (>= 14) để dùng công cụ cấp ID `specs/features.js`; nếu không, các lệnh sẽ dùng phương án thủ công (mục 3.3 của `conventions.md`).
+3. Chạy `node --version`. Lỗi: vẫn tiếp tục, nhưng báo người dùng cần cài Node.js (>= 14) để dùng công cụ cấp ID `features.js` của plugin; nếu không, các lệnh sẽ dùng phương án thủ công (mục 3.3 của `conventions.md`).
 4. Nếu thư mục đã có code (ví dụ `package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `pom.xml`, `*.csproj`), đọc các file manifest đó để lấy sẵn ngôn ngữ, framework, lệnh chạy/test. Không đoán nếu manifest không nói.
 
 ## Bước 2. Làm rõ ý tưởng
@@ -46,7 +46,7 @@ Với mỗi file: đọc template tương ứng, điền đầy đủ theo quy �
 | `docs/domain/entities.md` | `entities.md` | Điền các thực thể rõ ràng từ ý tưởng; chưa rõ thì chỉ giữ tiêu đề |
 | `docs/tech/architecture.md` | `architecture.md` | Mỏng: tổng quan, công nghệ, cấu trúc thư mục dự kiến, phi chức năng |
 | `docs/tech/decisions.md` | `decisions.md` | ADR-0001... cho từng quyết định công nghệ lớn đã chốt (nguồn "Khởi tạo dự án") |
-| `specs/features.js` | **`${CLAUDE_PLUGIN_ROOT}/scripts/features.js`** (nằm trong thư mục `scripts/`, không phải `templates/`) | **Chép nguyên văn từng ký tự**, không sửa, không điền placeholder (đọc file nguồn bằng Read rồi ghi bằng Write, hoặc dùng `cp`/`Copy-Item`). Khối `REGISTRY` để rỗng. Xong thì chạy `node specs/features.js list`: phải trả về `ok: true` và `next_id: "0001"` |
+| `specs/features.json` | (không có template) | **Không chép script vào dự án**: `features.js` nằm trong plugin và được gọi trực tiếp. Tạo bảng ánh xạ rỗng bằng cách chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" sync` (tạo `specs/` và `specs/features.json`). Xong chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" list`: phải trả về `ok: true` và `next_id: "0001"` |
 | `docs/INDEX.md` | `docs-index.md` | **Tạo sau cùng.** Chỉ liệt kê file thực sự vừa tạo; điền đủ nhóm quy tắc, thực thể, ADR từ các file đó (bảng nào chưa có dòng thì giữ đầu bảng, bỏ dòng mẫu) |
 
 ### Quy tắc kỹ thuật theo stack (tuỳ chọn)
@@ -63,7 +63,7 @@ Thư mục `docs/domain/flows/`, `docs/tech/data-schema.md`, `docs/tech/api.md` 
 
 ## Bước 4. Tự kiểm tra
 
-- [ ] Không còn `{{` trong các file vừa tạo (Grep), **trừ** `specs/features.js` được chép nguyên văn.
+- [ ] Không còn `{{` trong các file vừa tạo (Grep).
 - [ ] `overview.md` mục 6 có danh sách hướng tính năng, sắp theo thứ tự nên làm, tính năng nghiệp vụ lõi đứng đầu.
 - [ ] `architecture.md` và `decisions.md` khớp nhau (mỗi công nghệ trong bảng có ADR).
 - [ ] `docs/domain/` không nhắc công nghệ.

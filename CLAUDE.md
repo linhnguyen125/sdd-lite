@@ -14,7 +14,7 @@ plugins/sdd-lite/
   reference/conventions.md          # NGUỒN SỰ THẬT về quy ước: ID, trạng thái, mã định danh, quy chuẩn docs
   templates/       khuôn Markdown cho mọi file mà lệnh sinh ra
     stack-rules/<stack>/            # rules kỹ thuật theo stack (hiện có electron-vue); /init chép vào .claude/rules/ của dự án
-  scripts/features.js               # công cụ cấp ID + bảng ánh xạ; /init chép vào specs/features.js của dự án người dùng
+  scripts/features.js               # công cụ cấp ID; chạy trực tiếp từ plugin, ghi bảng ánh xạ specs/features.json của dự án người dùng
 ```
 
 ## Cách hoạt động (để sửa cho đúng)
@@ -35,12 +35,12 @@ plugins/sdd-lite/
 3. **Viết tiếng Việt có dấu** cho nội dung lệnh, template, README. Tên file, thư mục, ID, khoá frontmatter, giá trị `status`, tên lệnh: tiếng Anh/ASCII.
 4. **Placeholder** trong template dùng `{{...}}`; chú thích hướng dẫn dùng `<!-- ... -->` và lệnh phải yêu cầu xoá khi điền.
 5. **`scripts/features.js`:**
-   - Giữ nguyên cặp marker `// <registry>` và `// </registry>` cùng dòng `const REGISTRY = [];` ở bản gốc; script tự ghi đè khối này.
+   - Script **không được chép** vào dự án; lệnh gọi bằng `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js"`. Script không tự sửa chính nó; dữ liệu nằm ở `specs/features.json` (cwd của dự án).
    - Không thêm thư viện ngoài; chỉ dùng module có sẵn của Node (>= 14). Mọi lệnh in JSON, lỗi thoát mã 1.
-   - File được **chép nguyên văn** vào dự án người dùng, nên không thêm placeholder hay đường dẫn tuyệt đối.
+   - Không thêm đường dẫn tuyệt đối; luôn lấy thư mục dự án từ `process.cwd()`.
    - Sửa xong phải chạy lại bài kiểm tra bên dưới.
 6. **Không dùng tên file `CLAUDE.md` trong `templates/`** (Claude Code sẽ nạp nhầm làm memory). Template CLAUDE.md của người dùng tên là `claude-md.md`.
-7. Lệnh thay đổi trạng thái feature dùng `node specs/features.js set`, không sửa tay `REGISTRY` hay frontmatter.
+7. Lệnh thay đổi trạng thái feature dùng `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" set`, không sửa tay `specs/features.json` hay frontmatter.
 8. Plugin được copy vào cache khi cài, nên lệnh chỉ được tham chiếu file **bên trong** `plugins/sdd-lite/`, qua `${CLAUDE_PLUGIN_ROOT}`.
 
 ## Kiểm tra
@@ -52,14 +52,14 @@ claude plugin validate .
 node --check plugins/sdd-lite/scripts/features.js
 ```
 
-Kiểm tra script trong thư mục tạm (không chạy trong repo này, vì nó ghi vào chính file):
+Kiểm tra script trong thư mục tạm (không chạy trong repo này, vì nó ghi vào `specs/` của thư mục hiện tại):
 
 ```
-mkdir -p <tmp>/specs && cp plugins/sdd-lite/scripts/features.js <tmp>/specs/
-cd <tmp>
-node specs/features.js register "Tên thử"      # tạo specs/0001/, ghi REGISTRY
-node specs/features.js set 1 --status approved # kiểm tra frontmatter spec.md được cập nhật
-node specs/features.js list --table
+mkdir -p <tmp> && cd <tmp>   # thư mục tạm, cwd = "dự án"
+F=<đường dẫn repo>/plugins/sdd-lite/scripts/features.js
+node $F register "Tên thử"      # tạo specs/0001/, ghi specs/features.json
+node $F set 1 --status approved # kiểm tra frontmatter spec.md được cập nhật
+node $F list --table
 ```
 
 Thử lệnh với Claude Code mà không cần cài: `claude --plugin-dir ./plugins/sdd-lite` (trong một thư mục thử trống), rồi chạy `/sdd-lite:init <ý tưởng>`.

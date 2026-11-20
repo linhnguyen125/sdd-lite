@@ -1,5 +1,5 @@
 ---
-description: Tạo spec nghiệp vụ cho feature mới (script specs/features.js cấp ID 0001, 0002...) hoặc cập nhật spec của một feature theo ID
+description: Tạo spec nghiệp vụ cho feature mới (script features.js của plugin cấp ID 0001, 0002...) hoặc cập nhật spec của một feature theo ID
 argument-hint: <ý tưởng feature> | <ID> <bổ sung / trả lời câu hỏi mở>
 disable-model-invocation: true
 ---
@@ -15,7 +15,7 @@ Nhiệm vụ: tạo (hoặc cập nhật) `specs/<ID>/spec.md` mô tả **nghi�
 ## Bước 1. Chuẩn bị
 
 1. Đọc `${CLAUDE_PLUGIN_ROOT}/reference/conventions.md` và tuân theo toàn bộ.
-2. Kiểm tra dự án đã khởi tạo: `docs/domain/overview.md` và `specs/features.js` phải tồn tại. Nếu thiếu: dừng, báo cần chạy `/init <ý tưởng dự án>` trước.
+2. Kiểm tra dự án đã khởi tạo: `docs/domain/overview.md` và `specs/features.json` phải tồn tại. Nếu thiếu: dừng, báo cần chạy `/init <ý tưởng dự án>` trước.
 3. Kiểm tra Node.js bằng `node --version`. Lỗi: báo người dùng và dùng phương án dự phòng ở mục 3.3 của `conventions.md`.
 4. Nếu `$ARGUMENTS` rỗng: hỏi người dùng mô tả feature và dừng.
 
@@ -24,11 +24,11 @@ Nhiệm vụ: tạo (hoặc cập nhật) `specs/<ID>/spec.md` mô tả **nghi�
 Nhìn **từ đầu tiên** của `$ARGUMENTS`:
 
 **Chế độ B, cập nhật** khi từ đầu là số `^\d{1,4}$`:
-- Chạy `node specs/features.js get <ID>` (mục 3.2 của `conventions.md`). Phần còn lại của `$ARGUMENTS` là nội dung bổ sung hoặc câu trả lời.
+- Chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" get <ID>` (mục 3.2 của `conventions.md`). Phần còn lại của `$ARGUMENTS` là nội dung bổ sung hoặc câu trả lời.
 
 **Chế độ A, ý tưởng mới** trong mọi trường hợp khác: **luôn tạo feature mới**, không kiểm tra trùng với feature cũ (ở bước 3 bạn đọc docs nghiệp vụ nên đã nắm hiện trạng; nếu thấy ý tưởng chồng lên quy tắc hoặc feature cũ thì nêu ở mục 3 và mục 8 của spec).
 1. Đặt một **tên ngắn** tiếng Việt cho feature (tối đa khoảng 8 từ).
-2. Chạy `node specs/features.js register "<tên ngắn>"`. Công cụ cấp ID, tạo thư mục `specs/<ID>/` và ghi vào bảng ánh xạ. **Dùng đúng `id`, `folder`, `spec_file` mà công cụ trả về**, không tự tính ID. Có `warnings` về lệch: chạy `node specs/features.js sync`, rồi nêu trong báo cáo.
+2. Chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" register "<tên ngắn>"`. Công cụ cấp ID, tạo thư mục `specs/<ID>/` và ghi vào bảng ánh xạ. **Dùng đúng `id`, `folder`, `spec_file` mà công cụ trả về**, không tự tính ID. Có `warnings` về lệch: chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" sync`, rồi nêu trong báo cáo.
 3. Muốn sửa một feature đã có thì dùng `/spec <ID> <nội dung>` (Chế độ B), không dùng ý tưởng mới.
 
 ## Bước 3. Nạp ngữ cảnh nghiệp vụ
@@ -58,12 +58,12 @@ Yêu cầu chất lượng (theo mục 6 của `conventions.md`):
 
 ## Bước 5. Đồng bộ bảng ánh xạ
 
-Chế độ A: `register` đã ghi bảng ánh xạ, không cần làm thêm. Chế độ B: nếu tên feature đổi, chạy `node specs/features.js set <ID> --name "<tên mới>"`; nếu chỉ sửa nội dung thì chạy `node specs/features.js set <ID> --status <status hiện tại>` để làm mới ngày cập nhật.
+Chế độ A: `register` đã ghi bảng ánh xạ, không cần làm thêm. Chế độ B: nếu tên feature đổi, chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" set <ID> --name "<tên mới>"`; nếu chỉ sửa nội dung thì chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" set <ID> --status <status hiện tại>` để làm mới ngày cập nhật.
 
 ## Bước 6. Tự kiểm tra
 
 - [ ] Frontmatter đủ: `id`, `name`, `status`, `created`, `updated`; ID khớp tên thư mục và kết quả của `features.js`.
-- [ ] Chạy `node specs/features.js get <ID>`: trả về `ok: true` và `files.spec` là `true`.
+- [ ] Chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" get <ID>`: trả về `ok: true` và `files.spec` là `true`.
 - [ ] Đủ 10 mục đúng thứ tự, không còn `{{` hay chú thích HTML.
 - [ ] Không có công nghệ, bảng, endpoint, tên thư viện.
 - [ ] Mọi FR có kịch bản hoặc tiêu chí phủ; mọi BR trong mục 3 hoặc đã có trong `rules.md` hoặc mang mã `BR-NEW-n`.

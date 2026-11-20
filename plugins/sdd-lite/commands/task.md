@@ -15,7 +15,7 @@ Nhiệm vụ: tạo `specs/<ID>/tasks.md` chia plan thành các công việc nh�
 ## Bước 1. Chuẩn bị
 
 1. Đọc `${CLAUDE_PLUGIN_ROOT}/reference/conventions.md` và tuân theo toàn bộ.
-2. Lấy **ID** từ `$ARGUMENTS`, tìm feature bằng `node specs/features.js get <ID>` (mục 3.2 của `conventions.md`). Không có ID: dừng, hiển thị `node specs/features.js list --table`, yêu cầu chạy lại `/task <ID>`.
+2. Lấy **ID** từ `$ARGUMENTS`, tìm feature bằng `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" get <ID>` (mục 3.2 của `conventions.md`). Không có ID: dừng, hiển thị `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" list --table`, yêu cầu chạy lại `/task <ID>`.
 3. Điều kiện: `spec.md` và `plan.md` phải tồn tại; thiếu `plan.md` thì dừng và nhắc `/plan <ID>`. `status` là `done` hoặc `cancelled`: dừng.
 4. Đọc `spec.md`, `plan.md`, `CLAUDE.md`.
 

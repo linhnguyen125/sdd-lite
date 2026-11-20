@@ -26,7 +26,7 @@ Lệnh của plugin có tên đầy đủ dạng `/sdd-lite:<lệnh>`. Tên ng�
 
 | Lệnh | Việc làm | Sinh ra |
 |---|---|---|
-| `/sdd-lite:init <ý tưởng dự án>` | Khởi tạo dự án | `CLAUDE.md`, `docs/domain/*`, `docs/tech/*`, `specs/features.js` |
+| `/sdd-lite:init <ý tưởng dự án>` | Khởi tạo dự án | `CLAUDE.md`, `docs/domain/*`, `docs/tech/*`, `specs/features.json` |
 | `/spec <ý tưởng feature>` | Tạo feature mới (script tự cấp ID) | `specs/<ID>/spec.md` |
 | `/spec <ID> <bổ sung>` | Cập nhật spec, trả lời câu hỏi mở | cập nhật `spec.md` |
 | `/sdd-lite:plan <ID>` | Kế hoạch kỹ thuật | `plan.md` |
@@ -51,24 +51,24 @@ Lệnh của plugin có tên đầy đủ dạng `/sdd-lite:<lệnh>`. Tên ng�
 ## ID feature
 
 - 4 chữ số, bắt đầu `0001`, tăng dần; thư mục `specs/0001/`.
-- `/spec <ý tưởng>` chạy `node specs/features.js register "<tên ngắn>"` để cấp ID mới và tạo thư mục; luôn tạo feature mới, không kiểm tra trùng. Muốn sửa feature đã có: `/spec <ID> <nội dung>`.
+- `/spec <ý tưởng>` chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" register "<tên ngắn>"` để cấp ID mới và tạo thư mục; luôn tạo feature mới, không kiểm tra trùng. Muốn sửa feature đã có: `/spec <ID> <nội dung>`.
 - ID không đổi, không tái sử dụng (kể cả feature bị huỷ).
 - Các lệnh còn lại nhận ID làm tham số: `/task 0003`.
 - Feature `done` không sửa trực tiếp; thay đổi nghiệp vụ sau đó là feature mới.
 
-### `specs/features.js`: bảng ánh xạ và công cụ cấp ID
+### `features.js` (trong plugin) và `specs/features.json`: công cụ cấp ID và bảng ánh xạ
 
-`/init` chép file này vào `specs/`. Khối `REGISTRY` ở đầu file là bảng ánh xạ **ID ↔ tên feature** (kèm trạng thái, ngày cập nhật). File cũng là công cụ dòng lệnh, cần Node.js >= 14, không cần cài thư viện:
+`features.js` nằm trong plugin, không chép vào dự án; các lệnh gọi trực tiếp. Công cụ ghi bảng ánh xạ **ID ↔ tên feature** (kèm trạng thái, ngày cập nhật) vào `specs/features.json` của dự án. Cần Node.js >= 14, không cần cài thư viện:
 
 | Lệnh | Việc làm |
 |---|---|
-| `node specs/features.js register "<tên ngắn>"` | Cấp ID mới, tạo `specs/<ID>/`, ghi bảng ánh xạ |
-| `node specs/features.js get <ID>` | Tra feature theo ID, cho biết `spec`/`plan`/`tasks` đã có chưa |
-| `node specs/features.js set <ID> --status <s>` | Đổi trạng thái, cập nhật cả frontmatter `spec.md` |
-| `node specs/features.js list [--table]` | Liệt kê mọi feature |
-| `node specs/features.js sync` | Dựng lại bảng ánh xạ từ thư mục |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" register "<tên ngắn>"` | Cấp ID mới, tạo `specs/<ID>/`, ghi bảng ánh xạ |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" get <ID>` | Tra feature theo ID, cho biết `spec`/`plan`/`tasks` đã có chưa |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" set <ID> --status <s>` | Đổi trạng thái, cập nhật cả frontmatter `spec.md` |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" list [--table]` | Liệt kê mọi feature |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" sync` | Dựng lại bảng ánh xạ từ thư mục |
 
-Thư mục `specs/` vẫn là nguồn sự thật về sự tồn tại của feature; công cụ tự phát hiện và cảnh báo khi bảng lệch với thư mục. Không có Node.js thì lệnh dùng phương án thủ công (mục 3.3 của `conventions.md`). File cũng `require()` được: `{ REGISTRY, idToName, nameToId }`.
+Thư mục `specs/` vẫn là nguồn sự thật về sự tồn tại của feature; công cụ tự phát hiện và cảnh báo khi bảng lệch với thư mục. Không có Node.js thì lệnh dùng phương án thủ công (mục 3.3 của `conventions.md`).
 
 ## Hai tầng tài liệu
 
@@ -100,7 +100,7 @@ plugins/sdd-lite/
   commands/            init, spec, plan, task, implement, sync-domain, push
   reference/conventions.md   quy ước chung: ID, trạng thái, mã định danh, quy tắc viết, quy chuẩn docs
   templates/             khuôn Markdown cho mọi file sinh ra
-  scripts/features.js    công cụ cấp ID + bảng ánh xạ; /init chép vào specs/features.js của dự án
+  scripts/features.js    công cụ cấp ID + bảng ánh xạ; chạy trực tiếp từ plugin, ghi specs/features.json của dự án
 ```
 
 Muốn đổi cách làm việc: sửa `reference/conventions.md` (quy ước) hoặc `templates/` (khuôn). Mọi feature sẽ theo cùng một khuôn.

@@ -19,7 +19,7 @@ Nhiệm vụ: (1) xác minh feature đã `done`; (2) gom thay đổi và xin ng�
 ## Bước 1. Chuẩn bị
 
 1. Đọc `${CLAUDE_PLUGIN_ROOT}/reference/conventions.md` và tuân theo toàn bộ.
-2. Lấy **ID** là từ đầu tiên của `$ARGUMENTS`, tìm feature bằng `node specs/features.js get <ID>` (mục 3.2 của `conventions.md`). Không có ID: dừng, hiển thị `node specs/features.js list --table`. Từ `no-pr` trong `$ARGUMENTS` nghĩa là chỉ push nhánh, không mở pull request.
+2. Lấy **ID** là từ đầu tiên của `$ARGUMENTS`, tìm feature bằng `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" get <ID>` (mục 3.2 của `conventions.md`). Không có ID: dừng, hiển thị `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" list --table`. Từ `no-pr` trong `$ARGUMENTS` nghĩa là chỉ push nhánh, không mở pull request.
 3. Điều kiện: `status` phải là `done`. Chưa `done`: dừng, chỉ lệnh cần chạy (`/implement <ID>` hoặc `/sync-domain <ID>`). `cancelled`: dừng.
 4. Kiểm tra git: `git --version`, `git rev-parse --is-inside-work-tree` và `git remote get-url origin`. Không phải kho git hoặc không có remote `origin`: dừng, báo người dùng khởi tạo kho và thêm remote (không tự `git init`, không tự thêm remote).
 5. Tách `owner` và `repo` từ URL của `origin` (hỗ trợ `https://github.com/o/r(.git)` và `git@github.com:o/r(.git)`). Không phải GitHub: vẫn push được, nhưng bỏ qua Bước 5 và báo người dùng tự mở pull request.
@@ -28,7 +28,7 @@ Nhiệm vụ: (1) xác minh feature đã `done`; (2) gom thay đổi và xin ng�
 
 ## Bước 2. Gom thay đổi
 
-1. Chạy `git status --porcelain` và `git diff --stat` (cả file chưa theo dõi). Danh sách thay đổi của feature gồm: mã nguồn và test, `specs/<ID>/`, `specs/features.js`, các file trong `docs/`, `CLAUDE.md` nếu đổi.
+1. Chạy `git status --porcelain` và `git diff --stat` (cả file chưa theo dõi). Danh sách thay đổi của feature gồm: mã nguồn và test, `specs/<ID>/`, `specs/features.json`, các file trong `docs/`, `CLAUDE.md` nếu đổi.
 2. **Loại khỏi danh sách và báo người dùng:** file bí mật (`.env*`, khoá, chứng chỉ, `credentials*`), thư mục sinh ra (`node_modules/`, `dist/`, `build/`, `.cache/`), file lớn bất thường (hơn khoảng 5 MB), và thay đổi **không liên quan** feature này (nếu thấy thì hỏi người dùng có đưa vào không).
 3. Chạy test, lint theo `CLAUDE.md` một lần. Thất bại: dừng, báo, không push.
 4. Quét bí mật trong phần sẽ commit: Grep các mẫu phổ biến (khoá API, `BEGIN ... PRIVATE KEY`, `password=`, `secret=`, `token=`, chuỗi kết nối kèm mật khẩu) trên các file thêm/sửa. Có phát hiện: dừng, báo file và dòng, không push.

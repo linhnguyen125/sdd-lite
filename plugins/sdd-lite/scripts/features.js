@@ -2,32 +2,37 @@
 /**
  * SDD Lite v1.0.0 - Bảng ánh xạ ID <-> tên feature và công cụ cấp ID.
  *
- * Đặt tại specs/features.js. Cần Node.js >= 14, không cần cài thư viện.
- * Chạy từ gốc dự án. Mọi lệnh in JSON ra stdout (trừ `list --table`); lỗi thoát mã 1.
+ * Nằm trong plugin, KHÔNG chép vào dự án. Cần Node.js >= 14, không cần cài thư viện.
+ * Chạy từ gốc dự án (thư mục làm việc hiện tại = gốc dự án). Dữ liệu nằm ở specs/ của dự án.
+ * Mọi lệnh in JSON ra stdout (trừ `list --table`); lỗi thoát mã 1.
  *
- *   node specs/features.js register "<tên ngắn>"      Cấp ID mới, tạo thư mục specs/<ID>/
- *   node specs/features.js get <ID>                   Tra feature theo ID (thư mục, trạng thái, file đã có)
- *   node specs/features.js set <ID> --status <s>      Đổi trạng thái / tên [--name "<tên>"]; đồng bộ cả spec.md
- *   node specs/features.js list [--table]             Liệt kê mọi feature
- *   node specs/features.js sync                       Dựng lại bảng ánh xạ từ thư mục specs/
- *
- * Có thể require() để dùng bảng ánh xạ: { REGISTRY, idToName, nameToId }.
+ *   node <plugin>/scripts/features.js register "<tên ngắn>"   Cấp ID mới, tạo thư mục specs/<ID>/
+ *   node <plugin>/scripts/features.js get <ID>                Tra feature theo ID (thư mục, trạng thái, file đã có)
+ *   node <plugin>/scripts/features.js set <ID> --status <s>   Đổi trạng thái / tên [--name "<tên>"]; đồng bộ cả spec.md
+ *   node <plugin>/scripts/features.js list [--table]          Liệt kê mọi feature
+ *   node <plugin>/scripts/features.js sync                    Dựng lại bảng ánh xạ từ thư mục specs/
  *
  * Quy tắc: ID gồm 4 chữ số, bắt đầu 0001, không đổi, không tái sử dụng.
  * Nguồn sự thật về sự tồn tại của feature là các thư mục con của specs/;
- * trạng thái nằm ở frontmatter spec.md. Bảng REGISTRY bên dưới là bản ánh xạ do công cụ này ghi.
+ * trạng thái nằm ở frontmatter spec.md. Bảng ánh xạ là file specs/features.json do công cụ này ghi.
  */
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
 
-const SPECS_DIR = __dirname;
+const SPECS_DIR = path.join(process.cwd(), 'specs');
+const REGISTRY_FILE = path.join(SPECS_DIR, 'features.json');
 const STATUSES = ['draft', 'approved', 'in-progress', 'done', 'cancelled'];
 
-// <registry>
-const REGISTRY = [];
-// </registry>
+function readRegistry() {
+  try {
+    const data = JSON.parse(fs.readFileSync(REGISTRY_FILE, 'utf8'));
+    return Array.isArray(data) ? data : [];
+  } catch (e) {
+    return [];
+  }
+}
 
 // ---------- Tiện ích ----------
 
@@ -87,6 +92,7 @@ function readFrontmatter(file) {
 }
 
 function scanFolders() {
+  if (!fs.existsSync(SPECS_DIR)) return [];
   return fs
     .readdirSync(SPECS_DIR, { withFileTypes: true })
     .filter((d) => d.isDirectory())
@@ -100,7 +106,7 @@ function loadState() {
   const warnings = [];
   const byId = new Map();
 
-  REGISTRY.forEach((e) => byId.set(e.id, { ...e, registered: true, dir: null }));
+  readRegistry().forEach((e) => byId.set(e.id, { ...e, registered: true, dir: null }));
 
   folders.forEach((f) => {
     const existing = byId.get(f.id);
@@ -121,7 +127,7 @@ function loadState() {
       registered: false,
       dir: f.dir,
     });
-    warnings.push(`Thư mục ${f.dir} chưa có trong bảng ánh xạ. Chạy: node specs/features.js sync`);
+    warnings.push(`Thư mục ${f.dir} chưa có trong bảng ánh xạ. Chạy lệnh sync`);
   });
 
   byId.forEach((e) => {
@@ -154,16 +160,11 @@ function writeRegistry(features) {
   const entries = features
     .map((e) => ({ id: e.id, name: e.name, status: e.status, updated: e.updated }))
     .sort((a, b) => a.id.localeCompare(b.id));
-  const body = entries.length
-    ? `const REGISTRY = [\n${entries.map((e) => `  ${JSON.stringify(e)}`).join(',\n')},\n];`
-    : 'const REGISTRY = [];';
-  const source = fs.readFileSync(__filename, 'utf8');
-  const pattern = /(\/\/ <registry>\r?\n)[\s\S]*?(\r?\n\/\/ <\/registry>)/;
-  if (!pattern.test(source)) fail('Không tìm thấy khối <registry> trong features.js.');
-  const updated = source.replace(pattern, (_, open, close) => `${open}${body}${close}`);
-  const tmp = `${__filename}.tmp`;
-  fs.writeFileSync(tmp, updated, 'utf8');
-  fs.renameSync(tmp, __filename);
+  fs.mkdirSync(SPECS_DIR, { recursive: true });
+  const tmp = `${REGISTRY_FILE}.tmp`;
+  fs.writeFileSync(tmp, `${JSON.stringify(entries, null, 2)}
+`, 'utf8');
+  fs.renameSync(tmp, REGISTRY_FILE);
 }
 
 function updateSpecFrontmatter(dir, changes) {
@@ -297,12 +298,4 @@ function main() {
   }
 }
 
-if (require.main === module) {
-  main();
-} else {
-  module.exports = {
-    REGISTRY,
-    idToName: Object.fromEntries(REGISTRY.map((e) => [e.id, e.name])),
-    nameToId: Object.fromEntries(REGISTRY.map((e) => [e.name, e.id])),
-  };
-}
+main();

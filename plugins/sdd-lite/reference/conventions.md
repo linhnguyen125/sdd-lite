@@ -25,7 +25,7 @@ docs/
     data-schema.md                 # schema thực tế (tạo khi cần)
     api.md                         # giao diện công khai (tạo khi cần)
 specs/
-  features.js                      # BẢNG ÁNH XẠ ID <-> tên feature + công cụ cấp ID (Node.js)
+  features.json                    # BẢNG ÁNH XẠ ID <-> tên feature (do công cụ features.js của plugin ghi)
   0001/
     spec.md                        # /spec
     plan.md                        # /plan
@@ -36,40 +36,40 @@ specs/
 
 - Định dạng: **4 chữ số**, bắt đầu từ `0001`, tăng dần. Thư mục: `specs/<ID>/`.
 - ID **cố định**: không đổi, không đánh lại, **không tái sử dụng**, kể cả khi feature bị huỷ (giữ nguyên thư mục, đặt trạng thái `cancelled`).
-- Thư mục feature chỉ gồm ID (`specs/0001/`), không kèm tên. Tên feature nằm ở frontmatter `spec.md` và trong bảng ánh xạ `specs/features.js`.
+- Thư mục feature chỉ gồm ID (`specs/0001/`), không kèm tên. Tên feature nằm ở frontmatter `spec.md` và trong bảng ánh xạ `specs/features.json`.
 
-### 3.1. Công cụ `specs/features.js` (cấp ID mới)
+### 3.1. Công cụ `features.js` (cấp ID mới)
 
-`specs/features.js` vừa là **bảng ánh xạ ID ↔ tên feature** (khối `REGISTRY` ở đầu file), vừa là công cụ dòng lệnh. Chạy từ gốc dự án, cần Node.js >= 14, không cần cài thư viện. Mọi lệnh in JSON (`ok: true/false`) ra stdout; `ok: false` là lỗi, đọc trường `error`.
+`scripts/features.js` nằm **trong plugin** (không chép vào dự án; `${CLAUDE_PLUGIN_ROOT}` là đường dẫn plugin mà lệnh đã nêu). Công cụ đọc/ghi **bảng ánh xạ ID ↔ tên feature** `specs/features.json` của dự án. Chạy từ gốc dự án, cần Node.js >= 14, không cần cài thư viện. Mọi lệnh in JSON (`ok: true/false`) ra stdout; `ok: false` là lỗi, đọc trường `error`.
 
 | Lệnh | Việc làm | Ai dùng |
 |---|---|---|
-| `node specs/features.js register "<tên ngắn>"` | **Cấp ID mới**, tạo thư mục `specs/<ID>/`, ghi vào bảng ánh xạ; trả về `id`, `folder`, `spec_file` | `/spec` |
-| `node specs/features.js get <ID>` | Tra feature theo ID: tên, trạng thái, thư mục, file nào đã tồn tại (`spec`, `plan`, `tasks`) | mọi lệnh có tham số ID |
-| `node specs/features.js set <ID> --status <s>` | Đổi trạng thái (và/hoặc `--name`), **tự cập nhật cả frontmatter `spec.md`** | `/plan`, `/implement`, `/sync-domain` |
-| `node specs/features.js list [--table]` | Liệt kê mọi feature | tra cứu |
-| `node specs/features.js sync` | Dựng lại bảng ánh xạ từ các thư mục và frontmatter | khi `warnings` báo lệch |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" register "<tên ngắn>"` | **Cấp ID mới**, tạo thư mục `specs/<ID>/`, ghi vào bảng ánh xạ; trả về `id`, `folder`, `spec_file` | `/spec` |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" get <ID>` | Tra feature theo ID: tên, trạng thái, thư mục, file nào đã tồn tại (`spec`, `plan`, `tasks`) | mọi lệnh có tham số ID |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" set <ID> --status <s>` | Đổi trạng thái (và/hoặc `--name`), **tự cập nhật cả frontmatter `spec.md`** | `/plan`, `/implement`, `/sync-domain` |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" list [--table]` | Liệt kê mọi feature | tra cứu |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" sync` | Dựng lại bảng ánh xạ từ các thư mục và frontmatter | khi `warnings` báo lệch |
 
 Quy tắc dùng:
 1. **Chỉ lệnh `register` được tạo ID mới.** Không tự tính ID bằng tay khi Node chạy được, và không tự tạo thư mục `specs/<ID>/`.
 2. Tên truyền vào `register` là **tên ngắn** (tối đa khoảng 8 từ, tiếng Việt có dấu), không phải cả đoạn ý tưởng.
 3. `/spec <ý tưởng>` **luôn tạo feature mới**; không có bước kiểm tra trùng. Muốn sửa feature đã có thì dùng `/spec <ID> ...`.
 4. Có `warnings` về lệch giữa bảng và thư mục: chạy `sync`, rồi nêu trong báo cáo.
-5. Không sửa tay khối `REGISTRY` (trừ khi dùng phương án dự phòng ở 3.3).
+5. Không sửa tay `specs/features.json` (trừ khi dùng phương án dự phòng ở 3.3).
 
 ### 3.2. Tìm feature theo ID (các lệnh khác nhận ID làm tham số)
 
-1. Chạy `node specs/features.js get <ID>`. Công cụ tự đệm số 0 (`3` → `0003`) và từ chối `0000`.
+1. Chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" get <ID>`. Công cụ tự đệm số 0 (`3` → `0003`) và từ chối `0000`.
 2. `ok: true`: dùng `feature.folder` và `files`. `ok: false` (không có feature, ID sai): dừng, báo lỗi và liệt kê `features` trong kết quả.
-3. Nếu người dùng **không truyền ID**: không đoán. Chạy `node specs/features.js list --table`, hiển thị bảng và yêu cầu chạy lại kèm ID.
+3. Nếu người dùng **không truyền ID**: không đoán. Chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" list --table`, hiển thị bảng và yêu cầu chạy lại kèm ID.
 
 ### 3.3. Phương án dự phòng khi không có Node.js
 
 Nếu `node --version` lỗi: báo người dùng (khuyến nghị cài Node.js), rồi làm thủ công:
-1. Glob thư mục con của `specs/` khớp `^\d{4}-`; đọc khối `REGISTRY` trong `specs/features.js`. `ID mới = số lớn nhất trong cả hai + 1`, đệm đủ 4 chữ số, chưa có thì `0001`. Thư mục và bảng lệch nhau thì tin thư mục.
-2. Tạo thư mục `specs/<ID>/`, thêm một dòng vào `REGISTRY` đúng định dạng của các dòng khác (`{"id":..,"name":..,"status":..,"updated":..}`), giữ thứ tự tăng dần theo ID.
+1. Glob thư mục con của `specs/` khớp `^\d{4}-`; đọc `specs/features.json`. `ID mới = số lớn nhất trong cả hai + 1`, đệm đủ 4 chữ số, chưa có thì `0001`. Thư mục và bảng lệch nhau thì tin thư mục.
+2. Tạo thư mục `specs/<ID>/`, thêm một phần tử vào mảng của `specs/features.json` đúng định dạng của các phần tử khác (`{"id":..,"name":..,"status":..,"updated":..}`), giữ thứ tự tăng dần theo ID.
 3. Tìm theo ID: kiểm tra thư mục `specs/<ID>/` có tồn tại; không có thì dừng và báo.
-4. Đổi trạng thái: sửa cả `REGISTRY` và frontmatter `spec.md`.
+4. Đổi trạng thái: sửa cả `specs/features.json` và frontmatter `spec.md`.
 
 ## 4. Trạng thái feature (trường `status` trong frontmatter của spec.md)
 
@@ -110,9 +110,9 @@ Khi trích dẫn từ ngoài feature, ghi kèm ID feature: `0003/FR-001`.
 
 ## 7. Đồng bộ trạng thái và bảng ánh xạ
 
-- Nguồn sự thật: **thư mục** `specs/<ID>/` quyết định feature có tồn tại; **frontmatter `spec.md`** quyết định trạng thái; khối `REGISTRY` trong `specs/features.js` là bản ánh xạ cho tra cứu nhanh.
-- Mỗi lệnh làm đổi trạng thái feature chỉ cần gọi `node specs/features.js set <ID> --status <s>`; công cụ cập nhật cả `REGISTRY` lẫn frontmatter `spec.md` (cùng `updated`). Không sửa tay hai nơi.
-- Khi `warnings` báo lệch: chạy `node specs/features.js sync`.
+- Nguồn sự thật: **thư mục** `specs/<ID>/` quyết định feature có tồn tại; **frontmatter `spec.md`** quyết định trạng thái; `specs/features.json` là bản ánh xạ cho tra cứu nhanh.
+- Mỗi lệnh làm đổi trạng thái feature chỉ cần gọi `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" set <ID> --status <s>`; công cụ cập nhật cả `specs/features.json` lẫn frontmatter `spec.md` (cùng `updated`). Không sửa tay hai nơi.
+- Khi `warnings` báo lệch: chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" sync`.
 
 ## 8. Quy chuẩn tài liệu trong `docs/`
 

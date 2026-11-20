@@ -15,7 +15,7 @@ Nhiệm vụ: (1) kiểm tra code đã đáp ứng spec chưa; (2) nếu rồi, 
 ## Bước 1. Chuẩn bị
 
 1. Đọc `${CLAUDE_PLUGIN_ROOT}/reference/conventions.md` và tuân theo toàn bộ.
-2. Lấy **ID** là từ đầu tiên của `$ARGUMENTS`, tìm feature bằng `node specs/features.js get <ID>` (mục 3.2 của `conventions.md`). Không có ID: dừng, hiển thị `node specs/features.js list --table`.
+2. Lấy **ID** là từ đầu tiên của `$ARGUMENTS`, tìm feature bằng `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" get <ID>` (mục 3.2 của `conventions.md`). Không có ID: dừng, hiển thị `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" list --table`.
 3. Điều kiện: `spec.md`, `plan.md`, `tasks.md` phải tồn tại. `status` đã là `done`: dừng, báo đã đồng bộ. `cancelled`: dừng.
 4. Nếu còn công việc chưa `[x]` (ngoài các công việc đã ghi rõ là bỏ): **dừng**, liệt kê chúng, nhắc `/implement <ID>`. Chỉ tiếp tục khi `$ARGUMENTS` có từ `force`; khi đó ghi rõ trong báo cáo là đồng bộ khi còn dở dang.
 5. Đọc đầy đủ `spec.md`, `plan.md`, `tasks.md`. Với `docs/`: theo giao thức đọc docs (mục 9 của `conventions.md`), đọc `docs/INDEX.md` rồi chỉ mở đúng các file/mục sẽ sửa (theo mục 12 của plan).
@@ -74,7 +74,7 @@ Làm **sau cùng** của việc sửa docs, theo mục 8 của `conventions.md`:
 
 ## Bước 5. Đóng feature
 
-- Chạy `node specs/features.js set <ID> --status done` (công cụ tự cập nhật bảng ánh xạ, `status` và `updated` trong `spec.md`).
+- Chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" set <ID> --status done` (công cụ tự cập nhật bảng ánh xạ, `status` và `updated` trong `spec.md`).
 - `tasks.md`: xác nhận dòng "Tiến độ" đúng.
 
 ## Bước 6. Tự kiểm tra

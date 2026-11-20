@@ -15,14 +15,14 @@ Nhiệm vụ: viết code theo `tasks.md`, từng công việc một, đúng th�
 ## Bước 1. Chuẩn bị
 
 1. Đọc `${CLAUDE_PLUGIN_ROOT}/reference/conventions.md` và tuân theo toàn bộ.
-2. Lấy **ID** là từ đầu tiên của `$ARGUMENTS`, tìm feature bằng `node specs/features.js get <ID>` (mục 3.2 của `conventions.md`). Không có ID: dừng, hiển thị `node specs/features.js list --table`.
+2. Lấy **ID** là từ đầu tiên của `$ARGUMENTS`, tìm feature bằng `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" get <ID>` (mục 3.2 của `conventions.md`). Không có ID: dừng, hiển thị `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" list --table`.
 3. Điều kiện: `spec.md`, `plan.md`, `tasks.md` phải tồn tại; thiếu thì dừng và chỉ đúng lệnh cần chạy (`/plan`, `/task`). `status` là `done` hoặc `cancelled`: dừng.
 4. Phạm vi chạy (phần còn lại của `$ARGUMENTS`):
    - Không có: chạy mọi công việc chưa `[x]`, theo thứ tự.
    - `T003` hoặc `T003-T006`: chỉ các công việc đó.
    - `phase N`: chỉ phase đó.
 5. Đọc `spec.md`, `plan.md`, `tasks.md`, `CLAUDE.md` (lệnh test/lint, quy ước, nguyên tắc). Đọc các file mã nguồn mà công việc sẽ đụng tới. Cần tra nghiệp vụ hoặc kỹ thuật ngoài spec/plan (ví dụ nội dung một `BR-nnn`, một ADR): theo giao thức đọc docs (mục 9 của `conventions.md`), dùng `docs/INDEX.md` và Grep, không đọc cả `docs/`.
-6. Nếu `status` đang là `approved`: chạy `node specs/features.js set <ID> --status in-progress`.
+6. Nếu `status` đang là `approved`: chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" set <ID> --status in-progress`.
 
 ## Bước 2. Vòng lặp từng công việc
 

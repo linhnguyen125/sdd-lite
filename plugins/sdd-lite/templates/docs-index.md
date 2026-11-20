@@ -8,7 +8,7 @@ Cập nhật lần cuối: {{YYYY-MM-DD}}
 1. Đọc file này trước. Chỉ mở file hoặc mục khi cột "Đọc khi" khớp nhiệm vụ.
 2. Tìm theo mã bằng Grep (`BR-012`, `ADR-0003`, tên thực thể) rồi đọc đoạn quanh kết quả, không đọc cả file.
 3. Quy chuẩn viết và cập nhật tài liệu: xem mục 8 và 9 của `reference/conventions.md` trong plugin SDD Lite.
-4. Danh mục feature: `specs/features.js` (bảng ánh xạ ID ↔ tên) hoặc chạy `node specs/features.js list --table`.
+4. Danh mục feature: `specs/features.json` (bảng ánh xạ ID ↔ tên).
 
 ## 2. Tài liệu
 
@@ -24,7 +24,7 @@ Cập nhật lần cuối: {{YYYY-MM-DD}}
 | `docs/tech/decisions.md` | Quyết định kỹ thuật `ADR-nnnn` | Trước khi chọn thư viện hoặc cách làm |
 | `docs/tech/data-schema.md` | Schema dữ liệu thực tế | Đụng tới lưu trữ, migration |
 | `docs/tech/api.md` | Giao diện công khai | Thêm hoặc đổi API, CLI, sự kiện |
-| `specs/features.js` | Bảng ánh xạ ID ↔ tên feature, trạng thái; công cụ cấp ID | Tìm feature theo ID hoặc chủ đề; cấp ID mới |
+| `specs/features.json` | Bảng ánh xạ ID ↔ tên feature, trạng thái | Tìm feature theo ID hoặc chủ đề; cấp ID mới |
 
 <!-- Chỉ liệt kê file thực sự đang tồn tại. -->
 

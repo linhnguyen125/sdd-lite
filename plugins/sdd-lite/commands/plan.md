@@ -15,7 +15,7 @@ Nhiệm vụ: tạo `specs/<ID>/plan.md` trả lời "làm bằng cách nào". *
 ## Bước 1. Chuẩn bị
 
 1. Đọc `${CLAUDE_PLUGIN_ROOT}/reference/conventions.md` và tuân theo toàn bộ.
-2. Lấy **ID** từ `$ARGUMENTS` và tìm feature bằng `node specs/features.js get <ID>` (mục 3.2 của `conventions.md`). Không có ID: dừng, hiển thị `node specs/features.js list --table`, yêu cầu chạy lại `/plan <ID>`.
+2. Lấy **ID** từ `$ARGUMENTS` và tìm feature bằng `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" get <ID>` (mục 3.2 của `conventions.md`). Không có ID: dừng, hiển thị `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" list --table`, yêu cầu chạy lại `/plan <ID>`.
 3. Kiểm tra điều kiện:
    - `spec.md` phải tồn tại.
    - `status` là `cancelled` hoặc `done`: dừng, giải thích.
@@ -59,7 +59,7 @@ Ràng buộc:
 
 ## Bước 6. Cập nhật trạng thái
 
-- Nếu `status` đang `draft`: chạy `node specs/features.js set <ID> --status approved` (công cụ tự cập nhật bảng ánh xạ và frontmatter `spec.md`).
+- Nếu `status` đang `draft`: chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" set <ID> --status approved` (công cụ tự cập nhật bảng ánh xạ và frontmatter `spec.md`).
 - **Chưa** sửa `docs/` (việc đó thuộc `/sync-domain` sau khi triển khai).
 
 ## Bước 7. Báo cáo
