@@ -1,0 +1,25 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Môi trường / bí mật
+.env
+.env.*
+
+# Claude Code (cấu hình cục bộ)
+.claude/settings.local.json
+
+# Tạm
+*.log
+*.tmp
+tmp/
