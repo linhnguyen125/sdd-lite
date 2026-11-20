@@ -76,4 +76,4 @@ Trả lời ngắn gọn:
 2. **Tóm tắt** 3–5 dòng: mục tiêu, số FR, số kịch bản, quy tắc mới/đổi.
 3. **Mâu thuẫn hoặc rủi ro nghiệp vụ** phát hiện (nếu có).
 4. **Câu hỏi còn mở** kèm đề xuất. Hướng dẫn trả lời: `/spec <ID> <trả lời>`; nói "đồng ý đề xuất" cũng được.
-5. **Bước tiếp:** nếu không còn câu hỏi mở: `/plan <ID>`.
+5. **Dòng cuối cùng** là thông báo bước tiếp theo theo mục 10 của `conventions.md`: còn câu hỏi mở thì `/spec <ID> <trả lời>`, hết câu hỏi mở thì `/sdd-lite:plan <ID>`.

@@ -78,4 +78,5 @@ Trả lời ngắn gọn bằng tiếng Việt:
 1. Danh sách file đã tạo (kể cả `.claude/rules/*` nếu có), file đã bỏ qua vì tồn tại sẵn.
 2. Tóm tắt 3–5 dòng: dự án làm gì, stack đã chọn (nêu rõ phần nào là đề xuất cần duyệt), phạm vi bản đầu.
 3. Câu hỏi còn mở (nếu có).
-4. Bước tiếp theo: gợi ý feature đầu tiên (nghiệp vụ lõi) kèm lệnh mẫu, ví dụ: `/spec <mô tả feature đầu tiên>`.
+4. Gợi ý feature đầu tiên (nghiệp vụ lõi).
+5. **Dòng cuối cùng** là thông báo bước tiếp theo theo mục 10 của `conventions.md`, ví dụ: `/spec <mô tả feature đầu tiên>`.

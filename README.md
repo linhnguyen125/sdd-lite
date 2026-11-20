@@ -33,6 +33,7 @@ Lệnh của plugin có tên đầy đủ dạng `/sdd-lite:<lệnh>`. Tên ng�
 | `/task <ID>` | Chia công việc | `tasks.md` |
 | `/implement <ID> [T003 \| T003-T006 \| phase N]` | Viết code theo công việc, test trước | code, tick `tasks.md` |
 | `/sync-domain <ID>` | Đối chiếu code với spec, gộp vào `docs/`, đóng feature | cập nhật `docs/`, `status: done` |
+| `/push <ID> [no-pr]` | Đẩy feature `done` lên GitHub bằng MCP github, mở pull request (không tự merge) | nhánh `feature/<ID>`, commit, PR |
 
 ## Quy trình
 
@@ -42,8 +43,10 @@ Lệnh của plugin có tên đầy đủ dạng `/sdd-lite:<lệnh>`. Tên ng�
         ▼
 /spec <ý tưởng feature>  →  cấp ID 0001  →  trả lời câu hỏi mở: /spec 0001 <trả lời>
         ▼
-/sdd-lite:plan 0001  →  /task 0001  →  /implement 0001  →  /sync-domain 0001
+/sdd-lite:plan 0001  →  /task 0001  →  /implement 0001  →  /sync-domain 0001  →  /push 0001
 ```
+
+`/push` cần MCP github đã cấu hình (có quyền ghi repo). Lệnh hỏi xác nhận trước khi ghi, đẩy một commit lên nhánh `feature/<ID>` rồi mở pull request; không dùng `git push` và không tự merge.
 
 ## ID feature
 
@@ -94,7 +97,7 @@ Quy chuẩn (chi tiết ở mục 8 và 9 của `reference/conventions.md`):
 .claude-plugin/marketplace.json
 plugins/sdd-lite/
   .claude-plugin/plugin.json
-  commands/            init, spec, plan, task, implement, sync-domain
+  commands/            init, spec, plan, task, implement, sync-domain, push
   reference/conventions.md   quy ước chung: ID, trạng thái, mã định danh, quy tắc viết, quy chuẩn docs
   templates/             khuôn Markdown cho mọi file sinh ra
   scripts/features.js    công cụ cấp ID + bảng ánh xạ; /init chép vào specs/features.js của dự án

@@ -42,6 +42,7 @@ Mỗi feature có một ID cố định (`0001`, `0002`, ...), thư mục `specs
 | `/task <ID>` | Sinh `tasks.md` |
 | `/implement <ID>` | Thực thi công việc theo thứ tự, test trước |
 | `/sync-domain <ID>` | Đối chiếu code với spec, gộp nghiệp vụ vào `docs/` |
+| `/push <ID>` | Đẩy feature `done` lên GitHub (MCP github): nhánh `feature/<ID>`, commit, pull request |
 
 ## Tài liệu: đọc gì khi nào
 - **Đọc `docs/INDEX.md` trước** để biết file nào chứa gì và khi nào cần đọc. Không đọc cả `docs/`; dùng Grep theo mã (`BR-012`, `ADR-0003`) hoặc tên thực thể rồi đọc đoạn liên quan.

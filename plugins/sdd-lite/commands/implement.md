@@ -70,4 +70,4 @@ Chạy khi lượt này đã hoàn thành ít nhất một công việc **triể
 3. Kết quả test, lint (số liệu thật). Nếu thất bại: nói thẳng.
 4. **Kết quả review:** kết luận, số phát hiện theo mức độ, cái đã sửa, cái còn tồn đọng (hoặc "chưa review" kèm lý do).
 5. Vấn đề, giả định, hoặc việc phát sinh.
-6. Bước tiếp: còn việc thì `/implement <ID>` tiếp; xong hết thì `/sync-domain <ID>`.
+6. **Dòng cuối cùng** là thông báo bước tiếp theo theo mục 10 của `conventions.md`: còn việc chưa `[x]` hoặc review còn tồn đọng thì `/implement <ID>`; xong hết thì `/sync-domain <ID>`; spec/plan sai hoặc thiếu thì `/spec <ID> ...` hoặc `/sdd-lite:plan <ID>`. Áp dụng cả khi dừng giữa chừng ở Bước 3.

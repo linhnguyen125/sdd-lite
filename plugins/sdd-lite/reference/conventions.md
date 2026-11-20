@@ -1,6 +1,6 @@
 # Quy ước chung của SDD Lite
 
-Tài liệu này là **nguồn sự thật duy nhất** về quy ước. Mọi lệnh (`init`, `spec`, `plan`, `task`, `implement`, `sync-domain`) phải đọc và tuân theo trước khi làm việc.
+Tài liệu này là **nguồn sự thật duy nhất** về quy ước. Mọi lệnh (`init`, `spec`, `plan`, `task`, `implement`, `sync-domain`, `push`) phải đọc và tuân theo trước khi làm việc.
 
 ## 1. Đường dẫn plugin
 
@@ -106,7 +106,7 @@ Khi trích dẫn từ ngoài feature, ghi kèm ID feature: `0003/FR-001`.
 5. Mỗi yêu cầu phải **kiểm chứng được** (có thể viết thành test hoặc kiểm tra bằng mắt theo tiêu chí rõ ràng). Tránh từ mơ hồ: "nhanh", "thân thiện", "phù hợp".
 6. Điều chưa biết: ghi `[CẦN LÀM RÕ: <câu hỏi>]` thay vì đoán. Tối đa 5 mục như vậy trong một spec; điều nhỏ hơn thì chọn mặc định hợp lý và ghi vào mục Giả định.
 7. Ngày dùng định dạng `YYYY-MM-DD`.
-8. Không tự ý commit git. Chỉ commit khi người dùng yêu cầu.
+8. Không tự ý commit hoặc đẩy lên git. Chỉ làm khi người dùng yêu cầu; ngoại lệ duy nhất là `/push`, và `/push` vẫn phải được người dùng xác nhận trước khi ghi lên GitHub. Mọi thao tác ghi lên GitHub dùng MCP github, không dùng `git push`.
 
 ## 7. Đồng bộ trạng thái và bảng ánh xạ
 
@@ -137,3 +137,33 @@ Mục tiêu: người và AI tìm đúng thông tin cần mà không phải đ�
 3. Tìm bằng **Grep** theo mã (`BR-012`, `ADR-0003`), tên thực thể, hoặc thuật ngữ; sau đó đọc đoạn quanh kết quả (Read với `offset`/`limit`). Chỉ đọc cả file khi file ngắn hoặc nhiệm vụ cần toàn bộ.
 4. Gặp mâu thuẫn giữa INDEX và file thật: tin file thật, sửa INDEX, nêu trong báo cáo.
 5. Ngoại lệ: `CLAUDE.md` và `spec.md`/`plan.md`/`tasks.md` của feature đang làm luôn đọc đầy đủ.
+
+## 10. Thông báo bước tiếp theo (cuối mỗi lệnh)
+
+Mỗi lệnh khi kết thúc (kể cả khi dừng giữa chừng) phải **in ra màn hình** một khối cuối cùng cho người dùng, là **dòng cuối cùng** của câu trả lời (sau báo cáo, không có gì đứng sau):
+
+```
+Bước tiếp theo: `<lệnh hoàn chỉnh>`
+<1 dòng: vì sao là lệnh này>
+```
+
+Quy tắc:
+1. Lệnh phải **chép chạy được ngay**: có ID thật (`/sdd-lite:plan 0003`, không phải `<ID>`), trừ khi cần người dùng điền nội dung (ví dụ `/spec <ý tưởng feature>`).
+2. Lệnh `init` và `plan` ghi dạng đầy đủ `/sdd-lite:init`, `/sdd-lite:plan` vì trùng lệnh có sẵn của Claude Code; các lệnh khác ghi dạng ngắn.
+3. Chọn lệnh theo kết quả **thực tế** của lượt chạy, theo bảng dưới. Dừng giữa chừng thì chỉ lệnh cần chạy để gỡ vướng, không chỉ lệnh kế tiếp của luồng.
+4. Có nhiều khả năng thì liệt kê tối đa 2 lệnh, đánh dấu lệnh nên chạy trước.
+
+| Lệnh vừa chạy xong | Tình huống | Bước tiếp theo |
+|---|---|---|
+| `init` | xong | `/spec <ý tưởng feature đầu tiên>` |
+| `spec` | còn `[CẦN LÀM RÕ]` | `/spec <ID> <trả lời>` (hoặc "đồng ý đề xuất") |
+| `spec` | hết câu hỏi mở | `/sdd-lite:plan <ID>` |
+| `plan` | xong | `/task <ID>` |
+| `plan` | spec có vấn đề | `/spec <ID> <chỉnh sửa>` |
+| `task` | xong | `/implement <ID>` |
+| `implement` | còn việc chưa `[x]` hoặc review còn tồn đọng | `/implement <ID>` |
+| `implement` | xong hết | `/sync-domain <ID>` |
+| `implement` | spec/plan sai hoặc thiếu | `/spec <ID> ...` hoặc `/sdd-lite:plan <ID>` |
+| `sync-domain` | đã `done` | `/push <ID>` |
+| `sync-domain` | còn khoảng trống CRITICAL/HIGH | `/implement <ID>` rồi chạy lại `/sync-domain <ID>` |
+| `push` | đã đẩy | xem và merge PR; feature mới: `/spec <ý tưởng feature>` |

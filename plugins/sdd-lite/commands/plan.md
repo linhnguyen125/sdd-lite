@@ -68,4 +68,4 @@ Ràng buộc:
 2. Hướng tiếp cận 3–5 dòng; các quyết định chính; phụ thuộc mới (nếu có).
 3. Rủi ro đáng chú ý.
 4. Vấn đề phát hiện ở spec (nếu có).
-5. Bước tiếp: `/task <ID>`.
+5. **Dòng cuối cùng** là thông báo bước tiếp theo theo mục 10 của `conventions.md`: `/task <ID>`; nếu spec có vấn đề cần sửa trước thì `/spec <ID> <chỉnh sửa>`.

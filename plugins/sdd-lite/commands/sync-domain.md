@@ -92,4 +92,5 @@ Làm **sau cùng** của việc sửa docs, theo mục 8 của `conventions.md`:
 1. Feature `<ID> · <Tên>` đã `done` (hoặc lý do dừng).
 2. Bảng khoảng trống còn lại (nếu có, mức MEDIUM/LOW).
 3. Danh sách thay đổi theo từng file docs (thêm gì, đổi gì, mã BR/ADR mới).
-4. Việc gợi ý tiếp theo: feature kế tiếp trong `overview.md` mục 6, lệnh mẫu `/spec <ý tưởng>`.
+4. Feature kế tiếp gợi ý trong `overview.md` mục 6 (nếu có).
+5. **Dòng cuối cùng** là thông báo bước tiếp theo theo mục 10 của `conventions.md`: đã `done` thì `/push <ID>` (đẩy lên GitHub: nhánh + pull request); còn khoảng trống CRITICAL/HIGH hoặc dừng sớm thì `/implement <ID>`, rồi chạy lại `/sync-domain <ID>`.

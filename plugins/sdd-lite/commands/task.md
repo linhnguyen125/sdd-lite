@@ -49,4 +49,4 @@ Quy tắc:
 1. Feature `<ID> · <Tên>`, đường dẫn `tasks.md`.
 2. Số công việc theo phase, các checkpoint chính.
 3. Phần nào thay đổi so với bản trước (nếu là cập nhật).
-4. Bước tiếp: `/implement <ID>`.
+4. **Dòng cuối cùng** là thông báo bước tiếp theo theo mục 10 của `conventions.md`: `/implement <ID>`.
