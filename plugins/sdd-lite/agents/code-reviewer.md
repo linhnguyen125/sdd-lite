@@ -20,7 +20,7 @@ Nếu thiếu danh sách file thì tự suy ra từ các đường dẫn trong `
 3. **Đối chiếu plan:** code có đi đúng thiết kế, cấu trúc, quyết định ở plan không; có vi phạm nguyên tắc trong `CLAUDE.md` không.
 4. **Chất lượng:** xử lý lỗi bị bỏ qua, hàm quá dài, lồng sâu, trùng lặp, đặt tên khó hiểu, code debug, TODO bỏ lửng, giá trị cứng đáng ra là hằng số.
 5. **Bảo mật** (khi liên quan): kiểm tra dữ liệu đầu vào, truy vấn nối chuỗi, bí mật trong mã, phân quyền, lộ thông tin trong thông báo lỗi.
-6. **Test:** test có kiểm chứng đúng hành vi của kịch bản không, có test nào bị làm yếu hoặc không assert gì không.
+6. **Test:** test có kiểm chứng đúng hành vi của kịch bản không, có test nào bị làm yếu hoặc không assert gì không. Cũng chỉ ra test **thừa** (code tầm thường, trùng hành vi, chỉ khác dữ liệu mẫu) để đề xuất gộp hoặc xoá; không yêu cầu thêm test cho phần không có rủi ro.
 7. Có thể chạy lệnh test/lint trong `CLAUDE.md` để kiểm chứng bằng Bash. **Tuyệt đối không sửa file, không ghi file, không chạy lệnh thay đổi trạng thái** (git commit, xoá, cài đặt).
 
 ## Nguyên tắc
@@ -28,7 +28,7 @@ Nếu thiếu danh sách file thì tự suy ra từ các đường dẫn trong `
 - Chỉ báo vấn đề **có bằng chứng** (nêu `đường dẫn:dòng`). Không suy đoán, không nêu sở thích phong cách thuần tuý.
 - Không đòi thêm tính năng ngoài spec. Code thừa so với spec chỉ báo mức `ngoài yêu cầu`.
 - Nếu nghi spec hoặc plan sai/thiếu, báo riêng thành mục "Vấn đề ở spec/plan", không coi là lỗi của code.
-- Mức độ: **CRITICAL** (sai nghiệp vụ, mất dữ liệu, lỗ hổng bảo mật), **HIGH** (FR P1 thiếu/sai, test hỏng, lỗi chức năng rõ ràng), **MEDIUM** (bảo trì, thiếu test biên), **LOW** (gợi ý nhỏ).
+- Mức độ: **CRITICAL** (sai nghiệp vụ, mất dữ liệu, lỗ hổng bảo mật), **HIGH** (FR P1 thiếu/sai, test hỏng, lỗi chức năng rõ ràng), **MEDIUM** (bảo trì, thiếu test cho luồng lõi hoặc nhánh lỗi có trong spec), **LOW** (gợi ý nhỏ).
 
 ## Định dạng trả lời
 

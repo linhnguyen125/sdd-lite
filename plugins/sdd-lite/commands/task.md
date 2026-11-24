@@ -33,7 +33,8 @@ Quy tắc:
 - Phase 3 chia theo kịch bản P1 trước, rồi P2, P3. Trong mỗi nhóm: **test viết trước**, sau đó mới tới triển khai. Mỗi nhóm có Mục tiêu, Kiểm chứng độc lập và Checkpoint.
 - Phase 2 chỉ chứa việc chặn mọi kịch bản (migration, mô hình dùng chung). Không có thì ghi `Không áp dụng`.
 - Phase 4 luôn có: chạy toàn bộ test/lint/kiểm tra kiểu (dùng lệnh trong `CLAUDE.md`), chạy "Cách kiểm chứng nhanh" của plan và đối chiếu từng SC, rà soát bảo mật/xử lý lỗi.
-- Bảng "Độ phủ": **mọi FR** có công việc triển khai và công việc kiểm thử; **mọi SC** có công việc kiểm chứng. Thiếu thì thêm công việc.
+- Công việc test: theo mục 6b của `conventions.md`. **Mỗi nhóm kịch bản chỉ một công việc test** (gộp các ca liên quan), không tách mỗi FR một công việc test; kịch bản P2/P3 mặc định không có công việc test tự động.
+- Bảng "Độ phủ": **mọi FR** có công việc triển khai; công việc kiểm thử chỉ cho FR thuộc luồng lõi P1 hoặc BR có logic; **mọi SC** có cách kiểm chứng theo bảng kiểm thử của plan (test tự động, không test riêng, hoặc thủ công chỉ khi không tự động hoá được).
 - Chỉ bám plan. Việc ngoài plan không thêm vào đây.
 - Cập nhật dòng "Tiến độ": `Hoàn thành: X/Y công việc.`
 
@@ -41,7 +42,7 @@ Quy tắc:
 
 - [ ] Không còn `{{` hay chú thích HTML; mã `Tnnn` liên tục, không trùng.
 - [ ] Mọi công việc có đường dẫn (trừ công việc chạy lệnh) và thẻ truy vết.
-- [ ] Bảng độ phủ đầy đủ, không FR hay SC nào bị bỏ sót.
+- [ ] Bảng độ phủ đầy đủ: không FR nào thiếu công việc triển khai, không SC nào thiếu cách kiểm chứng; không có công việc test cho code tầm thường.
 - [ ] Trong mỗi nhóm kịch bản, công việc test đứng trước công việc triển khai.
 
 ## Bước 5. Báo cáo

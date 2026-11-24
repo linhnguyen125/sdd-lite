@@ -41,6 +41,7 @@ Cập nhật lần cuối: {{YYYY-MM-DD}}
 | {{Tên}} | {{1 dòng}} | {{BR-...}} |
 
 ## 5. Luồng (`docs/domain/flows/`)
+<!-- Chưa có file luồng nào: giữ đầu bảng, KHÔNG thêm dòng giữ chỗ kiểu "Chưa có luồng nào". -->
 
 | File | Mục đích | Thực thể / quy tắc chính |
 |---|---|---|
@@ -50,4 +51,4 @@ Cập nhật lần cuối: {{YYYY-MM-DD}}
 
 | Mã | Tiêu đề | Trạng thái |
 |---|---|---|
-| {{ADR-0001}} | {{...}} | {{Hiệu lực / Đã thay thế bởi ...}} |
+| {{ADR-0001}} | {{...}} | {{Đề xuất / Hiệu lực / Đã thay thế bởi ...}} |

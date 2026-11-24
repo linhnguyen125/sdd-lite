@@ -13,4 +13,5 @@ Cập nhật lần cuối: {{YYYY-MM-DD}}
 - **Quan hệ:** {{ví dụ: một Đơn hàng có nhiều Dòng hàng}}
 - **Vòng đời / trạng thái:** {{Mới → Đã xác nhận → Đã giao; hoặc "Không có"}}
 - **Quy tắc liên quan:** {{BR-...}}
-- **Nguồn:** {{ID feature đã tạo hoặc sửa}}
+- **Hiện trạng:** {{Đã có / Dự kiến}}
+- **Nguồn:** {{ID feature đã tạo hoặc sửa; thực thể từ /init chưa có feature: Khởi tạo dự án}}

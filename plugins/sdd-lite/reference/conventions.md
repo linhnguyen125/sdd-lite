@@ -108,6 +108,18 @@ Khi trích dẫn từ ngoài feature, ghi kèm ID feature: `0003/FR-001`.
 7. Ngày dùng định dạng `YYYY-MM-DD`.
 8. Không tự ý commit hoặc đẩy lên git. Chỉ làm khi người dùng yêu cầu; ngoại lệ duy nhất là `/push`, và `/push` vẫn phải được người dùng xác nhận trước khi commit và push. `/push` dùng `git` cục bộ để commit và push (không `--force`, không `--no-verify`), dùng MCP github để mở pull request; không đẩy nội dung file bằng MCP vì buộc phải gõ lại toàn bộ file.
 
+## 6b. Nguyên tắc kiểm thử tối giản
+
+Test là để bảo vệ luồng quan trọng, không phải để đạt số lượng. Áp dụng cho `/plan`, `/task`, `/implement`:
+
+1. **Chỉ test thứ có rủi ro:** quy tắc nghiệp vụ (BR) có nhánh/tính toán, luồng lõi của kịch bản P1, xử lý dữ liệu vào/ra (lưu, đọc, validate đầu vào ở biên). Mỗi kịch bản P1 chỉ cần **một test luồng chính** cộng thêm test cho các nhánh lỗi **có trong spec** (KB/BR). Không tự bịa thêm ca biên.
+2. **Không test:** hàm/getter/setter tầm thường, cấu hình, hằng số, component chỉ hiển thị, wrapper mỏng chuyển tiếp lời gọi, code của thư viện/framework, và các trạng thái giao diện (tải/lỗi/rỗng) trừ khi spec yêu cầu hành vi riêng.
+3. **Một hành vi một test.** Gộp các ca cùng hành vi bằng test theo bảng (`it.each`) hoặc một test nhiều assert; không viết nhiều test chỉ khác dữ liệu mẫu.
+4. **Kịch bản P2/P3 và phần không có logic:** không viết test riêng (ghi `Không test riêng` ở bảng kiểm thử của plan); chỉ cần lint, kiểm tra kiểu và build pass. Chỉ viết test tự động khi logic phức tạp.
+5. **Kiểm tra thủ công là ngoại lệ hiếm:** dự án làm theo kiểu vibe code, người dùng gần như không tự kiểm tay. Chỉ ghi `Thủ công` cho flow **không thể tự động hoá** (phần cứng, hộp thoại hệ thống của OS, cài đặt/ký/cập nhật app, dịch vụ ngoài không giả lập được) và nêu rõ lý do. Mọi flow còn lại phải kiểm chứng tự động hoặc không test riêng, không đẩy sang thủ công.
+6. **Không có chỉ tiêu độ phủ** theo số liệu; không thêm test chỉ để "phủ" một FR, SC hay dòng code.
+7. Cần thêm test ngoài phạm vi trên: ghi rõ lý do trong plan mục 8 trước khi viết.
+
 ## 7. Đồng bộ trạng thái và bảng ánh xạ
 
 - Nguồn sự thật: **thư mục** `specs/<ID>/` quyết định feature có tồn tại; **frontmatter `spec.md`** quyết định trạng thái; `specs/features.json` là bản ánh xạ cho tra cứu nhanh.
@@ -127,6 +139,11 @@ Mục tiêu: người và AI tìm đúng thông tin cần mà không phải đ�
 7. **Liên kết** dùng đường dẫn tương đối từ gốc dự án (`docs/domain/rules.md`) và mã, không dùng "xem ở trên".
 8. **Cập nhật INDEX cùng lúc.** Mọi thao tác thêm/xoá/đổi tên file hoặc H2 trong `docs/` phải cập nhật `docs/INDEX.md` trong cùng lượt làm việc. Không bao giờ để INDEX lệch với nội dung.
 9. **Không xoá lịch sử.** Quy tắc và quyết định bị thay đổi thì đổi trạng thái thành `Đã thay thế bởi <mã mới>`, không xoá dòng.
+10. **Hiện trạng: `Đã có` / `Dự kiến`.** `docs/` mô tả hệ thống như đang chạy, nên mọi thực thể (`entities.md`) và thành phần (`architecture.md` mục 3) phải ghi rõ `Đã có` (đã có trong code) hoặc `Dự kiến` (mới là thiết kế, chưa có feature nào xây). `/init` ghi `Dự kiến`; `/sync-domain` đổi sang `Đã có` khi feature xây xong phần đó. Phần chưa xây không được mô tả như đang chạy (sơ đồ, luồng dữ liệu, khôi phục...): ghi rõ "Dự kiến" hoặc để ở `overview.md` (hướng tính năng).
+11. **Trạng thái ADR:** `Đề xuất` (chưa được người dùng duyệt), `Hiệu lực`, `Đã thay thế bởi ADR-xxxx`. Không ghi lẫn kiểu "Hiệu lực (đề xuất)".
+12. **Ngưỡng ghi ADR:** chỉ ghi quyết định khó đảo ngược hoặc ảnh hưởng nhiều feature (stack, lưu trữ, mô hình tích hợp, bảo mật). Quyết định nhỏ, dễ đổi (chọn hàm, có dùng router hay không, ngưỡng số) ghi một dòng vào `architecture.md` hoặc `data-schema.md`, không tạo ADR.
+13. **ADR trỏ, không chép.** ADR chỉ nêu bối cảnh, quyết định, lý do, phương án loại, hệ quả. Chi tiết triển khai đã có nguồn ở `data-schema.md`, `api.md` hay code (cột, khoá cho phép, ngưỡng, PRAGMA...) thì trỏ tới, không chép lại.
+14. **Định nghĩa thuật ngữ chỉ ở `glossary.md`.** `overview.md` mục "Khái niệm cốt lõi" chỉ liệt kê tên kèm cụm ngắn; `entities.md` mô tả thuộc tính, quan hệ, vòng đời, không định nghĩa lại thuật ngữ.
 
 ## 9. Giao thức đọc docs (cho AI)
 

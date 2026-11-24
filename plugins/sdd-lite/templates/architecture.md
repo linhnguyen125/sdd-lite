@@ -23,11 +23,12 @@ Cập nhật lần cuối: {{YYYY-MM-DD}}
 | Triển khai | {{...}} | {{...}} | {{...}} |
 
 ## 3. Thành phần chính
-| Thành phần | Trách nhiệm | Phụ thuộc |
-|---|---|---|
-| {{...}} | {{...}} | {{...}} |
+| Thành phần | Trách nhiệm | Phụ thuộc | Hiện trạng |
+|---|---|---|---|
+| {{...}} | {{...}} | {{...}} | {{Đã có / Dự kiến}} |
 
 ## 4. Luồng dữ liệu chính
+<!-- Chỉ mô tả như đang chạy phần đã xây; phần chưa xây ghi rõ "(Dự kiến)". -->
 1. {{...}}
 
 ## 5. Cấu trúc thư mục mã nguồn

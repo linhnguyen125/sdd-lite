@@ -43,9 +43,9 @@ Với mỗi file: đọc template tương ứng, điền đầy đủ theo quy �
 | `docs/domain/overview.md` | `overview.md` | Điền đủ, đây là file quan trọng nhất |
 | `docs/domain/glossary.md` | `glossary.md` | Điền các khái niệm cốt lõi rút từ ý tưởng; xoá dòng mẫu |
 | `docs/domain/rules.md` | `rules.md` | Chỉ giữ tiêu đề và đầu bảng, **không bịa quy tắc**. Nếu người dùng đã nêu quy tắc cụ thể, ghi BR-001... với nguồn "Khởi tạo dự án" |
-| `docs/domain/entities.md` | `entities.md` | Điền các thực thể rõ ràng từ ý tưởng; chưa rõ thì chỉ giữ tiêu đề |
-| `docs/tech/architecture.md` | `architecture.md` | Mỏng: tổng quan, công nghệ, cấu trúc thư mục dự kiến, phi chức năng |
-| `docs/tech/decisions.md` | `decisions.md` | ADR-0001... cho từng quyết định công nghệ lớn đã chốt (nguồn "Khởi tạo dự án") |
+| `docs/domain/entities.md` | `entities.md` | Điền các thực thể rõ ràng từ ý tưởng; chưa rõ thì chỉ giữ tiêu đề. Mọi thực thể ghi `Hiện trạng: Dự kiến` (chưa có code) |
+| `docs/tech/architecture.md` | `architecture.md` | Mỏng: tổng quan, công nghệ, cấu trúc thư mục dự kiến, phi chức năng. Mọi thành phần ghi `Dự kiến`; không mô tả luồng/sơ đồ như đang chạy (mục 8.10 của `conventions.md`) |
+| `docs/tech/decisions.md` | `decisions.md` | ADR-0001... chỉ cho quyết định lớn, khó đảo ngược (mục 8.12 của `conventions.md`), nguồn "Khởi tạo dự án". Trạng thái `Hiệu lực` nếu người dùng đã chốt, `Đề xuất` nếu là gợi ý của AI |
 | `specs/features.json` | (không có template) | **Không chép script vào dự án**: `features.js` nằm trong plugin và được gọi trực tiếp. Tạo bảng ánh xạ rỗng bằng cách chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" sync` (tạo `specs/` và `specs/features.json`). Xong chạy `node "${CLAUDE_PLUGIN_ROOT}/scripts/features.js" list`: phải trả về `ok: true` và `next_id: "0001"` |
 | `docs/INDEX.md` | `docs-index.md` | **Tạo sau cùng.** Chỉ liệt kê file thực sự vừa tạo; điền đủ nhóm quy tắc, thực thể, ADR từ các file đó (bảng nào chưa có dòng thì giữ đầu bảng, bỏ dòng mẫu) |
 

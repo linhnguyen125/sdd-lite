@@ -51,7 +51,7 @@ updated: {{YYYY-MM-DD}}
 |---|---|---|
 | FR-001 | T004 | T003 |
 
-<!-- Mọi FR có ít nhất một công việc triển khai và một công việc kiểm thử. Mọi SC có công việc kiểm chứng. -->
+<!-- Mọi FR có công việc triển khai. Công việc kiểm thử chỉ cho FR thuộc luồng lõi P1 hoặc BR có logic (ghi "—" cho phần còn lại; chỉ ghi "Thủ công" cho flow không tự động hoá được). Mọi SC có cách kiểm chứng theo bảng kiểm thử của plan. -->
 
 ## Phát sinh trong lúc triển khai
 

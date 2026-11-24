@@ -22,7 +22,15 @@ Nhiệm vụ: (1) kiểm tra code đã đáp ứng spec chưa; (2) nếu rồi, 
 
 ## Bước 2. Hội tụ: đối chiếu code với spec
 
-Coi `spec.md`, `plan.md`, `tasks.md` là nguồn ý định duy nhất. Đánh giá **mã nguồn hiện tại** (không dựa vào lịch sử git). Với từng FR, KB, SC, BR (Mới/Đổi) và từng mục trong plan, tìm bằng chứng trong code/test (Grep, Read) và chạy test/lint theo `CLAUDE.md`.
+Coi `spec.md`, `plan.md`, `tasks.md` là nguồn ý định duy nhất. Đánh giá **mã nguồn hiện tại** (không dựa vào lịch sử git).
+
+**Giới hạn phạm vi đọc (tiết kiệm token):**
+- Chỉ đụng tới các file có đường dẫn trong `tasks.md` và mục 7 của plan (file mới/sửa). **Không quét cả `src/`**, không đọc file ngoài danh sách trừ khi một bằng chứng bắt buộc chỉ ra file đó.
+- **Grep trước, Read sau:** tìm bằng chứng bằng Grep theo mã truy vết (`FR-001`, `BR-004`), tên hàm/kênh, rồi chỉ Read đoạn quanh kết quả (`offset`/`limit`). Không đọc cả file code dài.
+- **Không kiểm lại việc đã có bằng chứng:** `/implement` đã chạy review độc lập và tick công việc. Nếu `tasks.md` đã tick hết, mục "Phát sinh trong lúc triển khai" không còn tồn đọng CRITICAL/HIGH, thì chỉ **kiểm mẫu** bằng chứng cho từng FR P1 và từng BR Mới/Đổi (một lần Grep mỗi mục), không đọc lại toàn bộ code. Có dấu hiệu bất thường (tồn đọng, `force`, tasks.md chỉnh tay) mới kiểm đầy đủ từng mục.
+- Chạy test/lint theo `CLAUDE.md` **một lần** (không chạy lại từng phần).
+
+Với từng FR P1, BR (Mới/Đổi) và mục plan cần thiết, tìm bằng chứng theo giới hạn trên.
 
 Phân loại từng khoảng trống:
 - `thiếu`: yêu cầu chưa được làm.
@@ -47,8 +55,8 @@ Dùng mục 12 của plan và mục 3, 4 của spec làm danh sách việc. Mỗ
    - Quy tắc `BR-NEW-n`: gán mã thật `BR-nnn` kế tiếp (số lớn nhất hiện có + 1), nguồn là ID feature, trạng thái `Hiệu lực`.
    - Quy tắc "Đổi": **không xoá** dòng cũ; đặt trạng thái `Đã thay thế bởi BR-xxx` và thêm dòng mới.
    - Cập nhật "Cập nhật lần cuối".
-2. **`entities.md`:** thêm hoặc sửa khối thực thể (thuộc tính, quan hệ, vòng đời, BR liên quan, nguồn).
-3. **`glossary.md`:** thêm thuật ngữ mới, giữ thứ tự bảng chữ cái.
+2. **`entities.md`:** thêm hoặc sửa khối thực thể (thuộc tính, quan hệ, vòng đời, BR liên quan, nguồn). Thực thể mà feature vừa xây trong code: đổi `Hiện trạng` thành `Đã có` và cập nhật theo code thực tế; thực thể chưa xây giữ `Dự kiến`.
+3. **`glossary.md`:** thêm thuật ngữ mới (kể cả tên thực thể mới, ví dụ "Cài đặt ứng dụng"), giữ thứ tự bảng chữ cái. Đây là nơi duy nhất định nghĩa thuật ngữ (mục 8.14 của `conventions.md`).
 4. **`flows/<slug>.md`:** nếu feature có luồng nhiều bước/tác nhân: tạo mới từ `templates/flow.md` hoặc cập nhật luồng có sẵn.
 5. **`overview.md`:** nếu feature thuộc "Hướng tính năng dự kiến", đổi cột Feature thành `<ID> (done)`; cập nhật phạm vi nếu thay đổi.
 6. **Ánh xạ mã tạm:** trong `spec.md` mục 3, thay `BR-NEW-n` bằng mã thật (ghi dạng `BR-017 (trước đó BR-NEW-1)`). Đây là chỉnh sửa duy nhất được phép trên spec ở bước này, ngoài frontmatter.
@@ -57,10 +65,12 @@ Tài liệu nghiệp vụ **không nhắc công nghệ**.
 
 ## Bước 4. Đồng bộ `docs/tech/`
 
-1. **`decisions.md`:** chuyển mỗi quyết định ở mục 4 của plan thành ADR mới (`ADR-nnnn` kế tiếp), nguồn là ID feature. Quyết định thay thế quyết định cũ: đổi trạng thái cũ thành `Đã thay thế bởi ADR-xxxx`.
-2. **`architecture.md`:** cập nhật thành phần, công nghệ, luồng dữ liệu, cấu trúc thư mục nếu feature làm đổi; sửa "Cập nhật lần cuối".
-3. **`data-schema.md`:** nếu plan có thay đổi dữ liệu: tạo từ `templates/data-schema.md` nếu chưa có, rồi thêm/sửa theo **schema thực tế trong code** (đối chiếu migration/model, không chép từ plan nếu code khác).
-4. **`api.md`:** nếu có giao diện mới/đổi: tạo từ `templates/api.md` nếu chưa có, rồi cập nhật theo code thực tế.
+1. **`decisions.md`:** chỉ quyết định **lớn, khó đảo ngược** ở mục 4 của plan mới thành ADR mới (`ADR-nnnn` kế tiếp, nguồn là ID feature; ngưỡng ở mục 8.12 của `conventions.md`). Quyết định nhỏ ghi một dòng vào `architecture.md` hoặc `data-schema.md`. ADR không chép chi tiết đã có ở `data-schema.md`/`api.md`, chỉ trỏ tới (mục 8.13). Quyết định đã được người dùng duyệt thì đổi `Đề xuất` thành `Hiệu lực`. Quyết định thay thế quyết định cũ: đổi trạng thái cũ thành `Đã thay thế bởi ADR-xxxx`.
+2. **`architecture.md`:** cập nhật thành phần, công nghệ, luồng dữ liệu, cấu trúc thư mục nếu feature làm đổi; thành phần vừa xây đổi `Hiện trạng` thành `Đã có`, phần chưa xây giữ `Dự kiến`; sửa "Cập nhật lần cuối".
+3. **`data-schema.md`:** nếu plan có thay đổi dữ liệu: tạo từ `templates/data-schema.md` nếu chưa có, rồi thêm/sửa theo **schema thực tế trong code** (đối chiếu **chỉ** file migration/model đã nêu ở mục 7 của plan, không chép từ plan nếu code khác).
+4. **`api.md`:** nếu có giao diện mới/đổi: tạo từ `templates/api.md` nếu chưa có, rồi cập nhật theo code thực tế (**chỉ** file khai báo kênh/route đã nêu ở mục 7 của plan).
+
+Với `docs/`: **chỉ sửa đúng H2/mục liên quan** (theo mục 12 của plan), dùng Edit tại chỗ; không ghi lại cả file, không đọc lại file docs không nằm trong danh sách sửa.
 5. **`CLAUDE.md`:** nếu lệnh chạy/test, cấu trúc mã nguồn hoặc quy ước đã đổi, cập nhật phần tương ứng.
 
 ## Bước 4b. Cập nhật `docs/INDEX.md` và quy chuẩn docs
@@ -70,7 +80,7 @@ Làm **sau cùng** của việc sửa docs, theo mục 8 của `conventions.md`:
 1. Mọi file/H2 vừa thêm, xoá, đổi tên: cập nhật `docs/INDEX.md` (bảng "Tài liệu", nhóm quy tắc kèm dải mã BR, thực thể, luồng, ADR kèm trạng thái). Sửa "Cập nhật lần cuối".
 2. Mỗi file docs vừa sửa: còn đủ H1, dòng `> Tóm tắt` (sửa nếu nội dung đã đổi), dòng `Cập nhật lần cuối`.
 3. **Kiểm tra cỡ file:** file nào trong `docs/` vượt khoảng 400 dòng thì tách theo H2 thành thư mục cùng tên (mục 8.6), rồi cập nhật INDEX và mọi liên kết trỏ tới. Nêu rõ việc tách trong báo cáo.
-4. **Đối chiếu INDEX với thực tế:** Glob `docs/**/*.md` và Grep các H2 của `rules.md`, `entities.md`, `decisions.md`; mọi file và mục phải có trong INDEX, INDEX không được trỏ tới thứ không tồn tại.
+4. **Đối chiếu INDEX với thực tế:** Glob `docs/**/*.md` và Grep (`^## `) các H2 của `rules.md`, `entities.md`, `decisions.md` (chỉ in dòng H2, không đọc nội dung); mọi file và mục phải có trong INDEX, INDEX không được trỏ tới thứ không tồn tại.
 
 ## Bước 5. Đóng feature
 
@@ -83,6 +93,7 @@ Làm **sau cùng** của việc sửa docs, theo mục 8 của `conventions.md`:
 - [ ] Mã BR/ADR mới liên tục, không trùng, không tái sử dụng.
 - [ ] Không xoá quy tắc/quyết định cũ; chỉ đổi trạng thái.
 - [ ] `docs/domain/` không nhắc công nghệ.
+- [ ] Mọi thực thể và thành phần có `Hiện trạng` đúng với code; không ADR nào ghi trạng thái lẫn kiểu "Hiệu lực (đề xuất)"; ADR mới đạt ngưỡng 8.12 và không chép chi tiết đã có ở nơi khác.
 - [ ] Mục 12 của plan đã được xử lý hết.
 - [ ] `docs/INDEX.md` khớp hoàn toàn với file và H2 thực tế; không file docs nào vượt khoảng 400 dòng mà chưa tách.
 - [ ] Mỗi thông tin chỉ nằm ở một nơi; nơi khác trỏ bằng mã (không chép lại).

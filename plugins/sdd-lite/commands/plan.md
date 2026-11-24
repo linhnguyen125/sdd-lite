@@ -42,7 +42,7 @@ Với mỗi lựa chọn kỹ thuật chưa rõ (thư viện, cách lưu, cách 
 
 Ràng buộc:
 - Mục 3 (truy vết): **mọi FR và mọi BR Mới/Đổi** trong spec phải có dòng tương ứng.
-- Mục 8 (kiểm thử): **mọi SC và KB** phải được phủ; logic nghiệp vụ có test đơn vị.
+- Mục 8 (kiểm thử): theo mục 6b của `conventions.md`. Chỉ luồng lõi P1 và BR có logic dùng test tự động; phần còn lại ghi "Không test riêng". Chỉ ghi "Thủ công" cho flow không thể tự động hoá, kèm lý do (người dùng hầu như không kiểm tay). Mỗi dòng là một nhóm test, không liệt kê từng ca.
 - Mục 9: đối chiếu từng nguyên tắc trong `CLAUDE.md`. Vi phạm không có lý do chính đáng: sửa thiết kế, không biện minh.
 - Mục 6 chỉ điền khi có giao diện mới/đổi; không thì ghi `Không áp dụng: <lý do>`.
 - Mục 11 chỉ liệt kê bước chạy và kết quả mong đợi, **không** chứa code triển khai.
@@ -53,7 +53,7 @@ Ràng buộc:
 
 - [ ] Đủ 12 mục đúng thứ tự, không còn `{{` hay chú thích HTML.
 - [ ] Bảng truy vết phủ 100% FR và BR Mới/Đổi.
-- [ ] Bảng kiểm thử phủ 100% SC và KB.
+- [ ] Bảng kiểm thử: test tự động chỉ cho luồng lõi và BR có logic; "Thủ công" chỉ cho flow không tự động hoá được và có nêu lý do.
 - [ ] Mọi quyết định ở mục 4 có phương án thay thế.
 - [ ] Không có đoạn code triển khai.
 

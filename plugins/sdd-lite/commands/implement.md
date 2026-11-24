@@ -29,7 +29,7 @@ Nhiệm vụ: viết code theo `tasks.md`, từng công việc một, đúng th�
 Với mỗi công việc chưa xong, theo thứ tự trong `tasks.md`:
 
 1. **Kiểm tra phụ thuộc:** các công việc nó phụ thuộc đã `[x]` chưa. Chưa thì làm việc đó trước hoặc dừng và báo.
-2. **Công việc viết test:** viết test theo kịch bản/FR liên quan, chạy và **xác nhận test thất bại đúng lý do** (chưa có triển khai), không phải lỗi cú pháp.
+2. **Công việc viết test:** viết test theo kịch bản/FR liên quan, **tối thiểu cần thiết** theo mục 6b của `conventions.md` (một test luồng chính, thêm nhánh lỗi chỉ khi spec nêu; không thêm ca biên tự nghĩ ra, không test code tầm thường), chạy và **xác nhận test thất bại đúng lý do** (chưa có triển khai), không phải lỗi cú pháp.
 3. **Công việc triển khai:** viết **lượng code tối thiểu** để test pass, bám plan (mục 3, 5, 6, 7). Chạy lại test để xác nhận pass. Sau đó dọn gọn nếu cần, test vẫn pass.
 4. **Công việc cấu hình/khác:** làm đúng mô tả, kiểm tra bằng cách chạy lệnh liên quan.
 5. **Tick ngay** `- [ ]` → `- [x]` trong `tasks.md` khi xong, cập nhật dòng "Tiến độ" và `updated`.

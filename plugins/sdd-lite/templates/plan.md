@@ -66,9 +66,9 @@ updated: {{YYYY-MM-DD}}
 
 | Mục tiêu kiểm thử | Loại test | Phủ |
 |---|---|---|
-| {{quy tắc / kịch bản}} | {{Đơn vị / Tích hợp / E2E / Thủ công}} | {{KB-01, SC-001, BR-...}} |
+| {{quy tắc / kịch bản}} | {{Đơn vị / Tích hợp / E2E / Không test riêng / Thủ công (chỉ khi không tự động hoá được)}} | {{KB-01, SC-001, BR-...}} |
 
-<!-- Mọi SC và mọi KB phải được phủ. Logic nghiệp vụ nên có test đơn vị viết trước. -->
+<!-- Chỉ test tự động luồng lõi P1 và BR có logic; còn lại ghi "Không test riêng". "Thủ công" chỉ cho flow không tự động hoá được (nêu lý do). Mỗi dòng là một nhóm test, không liệt kê từng ca. Theo mục 6b của conventions.md. -->
 
 ## 9. Kiểm tra theo nguyên tắc dự án
 

@@ -18,7 +18,7 @@ Cập nhật lần cuối: {{YYYY-MM-DD}}
 - {{...}}
 
 ## 4. Khái niệm cốt lõi
-<!-- 5–10 khái niệm. Định nghĩa đầy đủ nằm ở glossary.md và entities.md. -->
+<!-- 5–10 khái niệm, mỗi cái chỉ tên kèm cụm ngắn. Định nghĩa duy nhất nằm ở glossary.md, thuộc tính/vòng đời ở entities.md; không viết lại ở đây. -->
 | Khái niệm | Mô tả một dòng |
 |---|---|
 | {{...}} | {{...}} |

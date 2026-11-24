@@ -70,7 +70,7 @@ updated: {{YYYY-MM-DD}}
 
 | Mã | Tiêu chí (đo hoặc quan sát được) | Cách kiểm tra |
 |---|---|---|
-| SC-001 | {{...}} | {{Test tự động / Kiểm tra thủ công theo KB-01}} |
+| SC-001 | {{...}} | {{Test tự động / Lint, kiểu, build pass / Thủ công (chỉ khi không tự động hoá được)}} |
 
 ## 8. Giả định và ràng buộc
 - {{Giả định: điều tạm coi là đúng khi chưa xác nhận}}
